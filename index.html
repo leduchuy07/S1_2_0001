@@ -12,7 +12,37 @@
     html, body { height: 100%; padding: 0; margin: 0 }
     #app { height: 100%; width: 100%; }
   </style>
+<script>
+    (function() {
+      var allowedDomain = "learnizza.com";
+      var redirectUrl = "https://learnizza.com/practice/english/starters-digital.html";
 
+      try {
+        // Check 1: Are we in an iframe? If not, redirect.
+        if (window.self === window.top) {
+          window.location.href = redirectUrl;
+          return;
+        }
+
+        // Check 2: Get the parent frame's domain from the referrer.
+        // We use new URL() to reliably parse the hostname.
+        var referrerHostname = new URL(document.referrer).hostname;
+
+        // Check 3: Is the domain 'learnizza.com' or a subdomain like 'www.learnizza.com'?
+        var isAllowed = (referrerHostname === allowedDomain) || referrerHostname.endsWith('.' + allowedDomain);
+
+        if (!isAllowed) {
+          // Not on the allowed domain, so redirect.
+          window.location.href = redirectUrl;
+        }
+        // If allowed, do nothing and let the page load.
+      } catch (e) {
+        // Any error (e.g., no referrer, security issue) defaults to redirecting.
+        window.location.href = redirectUrl;
+      }
+    })();
+  </script>
+  
   <script>
     window.DS = {};
     window.globals = {
